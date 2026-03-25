@@ -2,12 +2,14 @@ from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 
 def cifrar_con_rsa(mensaje: bytes, public_key_pem: bytes) -> bytes:
-    # TODO: implementar
-    pass
+    recipient_key = RSA.import_key(public_key_pem)
+    cipher_rsa = PKCS1_OAEP.new(recipient_key)
+    return cipher_rsa.encrypt(mensaje)
 
 def descifrar_con_rsa(cifrado: bytes, private_key_pem: bytes) -> bytes:
-    # TODO: implementar
-    pass
+    private_key = RSA.import_key(private_key_pem, passphrase="lab04uvg")
+    cipher_rsa = PKCS1_OAEP.new(private_key)
+    return cipher_rsa.decrypt(cifrado)
 
 if __name__ == '__main__':
     # Cargar claves generadas en el ejercicio anterior
@@ -29,4 +31,4 @@ if __name__ == '__main__':
     # resultados distintos? Demuéstralo y explica qué propiedad de OAEP lo causa.
     c1 = cifrar_con_rsa(mensaje_original, pub)
     c2 = cifrar_con_rsa(mensaje_original, pub)
-    print(f"\nc1 == c2: {c1 == c2}")   # Esperado: False
+    print(f"\nc1 == c2: {c1 == c2}")   # False
